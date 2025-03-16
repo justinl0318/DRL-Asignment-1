@@ -126,9 +126,10 @@ class SimpleTaxiEnv():
         destination_loc_middle  = int( (taxi_row, taxi_col) == self.destination)
         destination_look = destination_loc_north or destination_loc_south or destination_loc_east or destination_loc_west or destination_loc_middle
 
-        
         state = (taxi_row, taxi_col, self.stations[0][0],self.stations[0][1] ,self.stations[1][0],self.stations[1][1],self.stations[2][0],self.stations[2][1],self.stations[3][0],self.stations[3][1],obstacle_north, obstacle_south, obstacle_east, obstacle_west, passenger_look, destination_look)
         return state
+    
+    
     def render_env(self, taxi_pos,   action=None, step=None, fuel=None):
         clear_output(wait=True)
 
@@ -157,11 +158,13 @@ class SimpleTaxiEnv():
         if 0 <= tx < self.grid_size and 0 <= ty < self.grid_size:
             grid[ty][tx] = '🚖'
 
+        py, px = self.passenger_loc
+
         # Print step info
         print(f"\nStep: {step}")
-        print(f"Taxi Position: ({tx}, {ty})")
-        #print(f"Passenger Position: ({px}, {py}) {'(In Taxi)' if (px, py) == (tx, ty) else ''}")
-        #print(f"Destination: ({dx}, {dy})")
+        print(f"Taxi Position: ({ty}, {tx})")
+        print(f"Passenger Position: ({py}, {px}) {'(In Taxi)' if (py, px) == (ty, tx) else ''}")
+        # print(f"Destination: ({dx}, {dy})")
         print(f"Fuel Left: {fuel}")
         print(f"Last Action: {self.get_action_name(action)}\n")
 
@@ -193,7 +196,7 @@ def run_agent(agent_file, env_config, render=False):
     if render:
         env.render_env((taxi_row, taxi_col),
                        action=None, step=step_count, fuel=env.current_fuel)
-        time.sleep(0.5)
+        # time.sleep(1)
     while not done:
         
         
@@ -209,6 +212,7 @@ def run_agent(agent_file, env_config, render=False):
         if render:
             env.render_env((taxi_row, taxi_col),
                            action=action, step=step_count, fuel=env.current_fuel)
+            # time.sleep(1)
 
     print(f"Agent Finished in {step_count} steps, Score: {total_reward}")
     return total_reward
