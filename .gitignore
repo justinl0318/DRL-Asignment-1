@@ -4,6 +4,8 @@ __pycache__/
 *.pyo
 .venv/
 .env
+*.txt
 
 # ignore eval.py
 eval.py
+test.py
